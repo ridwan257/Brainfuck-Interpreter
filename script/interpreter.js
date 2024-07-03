@@ -1,10 +1,6 @@
-function selectText(element, positionStart, positionEnd) {
-    const Range = ace.require('ace/range').Range;
-    const range = new Range(positionStart.row, positionStart.column, positionEnd.row, positionEnd.column);
-    element.getSession().getSelection().setSelectionRange(range);
-}
 
-function find_prev(stringstream, index){
+
+function find_prev(stringstream, index, line_number){
     let sum = 0;
     for(let i = index; i>=0; i--){
         if(stringstream[i] == ']'){
@@ -12,6 +8,9 @@ function find_prev(stringstream, index){
         }
         else if(stringstream[i] == '['){
             sum--;
+        }
+        else if(stringstream[i] == '\n'){
+            line_number--;
         }
         
         if(sum == 0){
@@ -42,12 +41,15 @@ function grab_input(message) {
 }
 
 async function interpreter(stringstream, memory, current=0, index=0, end=null){
-
     let ostream = '';
     let ouptput_holder = false;
     let ouptput_elem = null;
     let istream = '';
+    let line_num = 0;
+    let col_num = 0;
+
     while(true){
+        memory.highlight(index, true);
         ch = stringstream[current];
         
         if(ch == null || (end && current > end))
@@ -65,11 +67,13 @@ async function interpreter(stringstream, memory, current=0, index=0, end=null){
             memory.update(index, value-1);
         }
         else if(ch == '>')
-        {
+        {   
+            memory.highlight(index, false);
             index++;
         }
         else if(ch == '<')
-        {
+        {   
+            memory.highlight(index, false);
             index--;
         }
         else if(ch == '[')
@@ -78,7 +82,7 @@ async function interpreter(stringstream, memory, current=0, index=0, end=null){
         }
         else if(ch == ']' && memory.at(index) != 0)
         {   
-            current = find_prev(stringstream, current);
+            current = find_prev(stringstream, current, line_num);
             continue; 
         }
         else if(ch == '.'){
@@ -100,9 +104,17 @@ async function interpreter(stringstream, memory, current=0, index=0, end=null){
             istream = istream.substring(1);
             memory.update(index, value);
         }
+        else if(ch == '*'){
+            await grab_input();
+        }
+        else if(ch == '\n'){
+            line_num++;
+            col_num = 0;
+        }
         
         
         current++;
+        col_num++;
     }
 
 }

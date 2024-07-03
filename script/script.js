@@ -2,12 +2,6 @@
 
 const memory = allocate_memory("#memory-section table", 16, 2);
 
-const editor = ace.edit(document.querySelector('#code-editor'), {
-    selectionStyle: "text"
-});
-
-
-
 // selectText({ row: 0, column: 1 }, { row: 0, column: 2 });
 
 document.getElementById("run").addEventListener('click', ()=>{

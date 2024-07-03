@@ -29,12 +29,19 @@ class Memory{
     reset(){
         this.blocks.forEach(e => {
             e.innerText = 0;
+            e.style.backgroundColor = 'bisque';
         });
     }
 
     push(item){
         this.blocks.push(item);
     }
+
+    highlight(index, state){
+        const bg_color = (state) ? 'yellow' : 'bisque';
+        this.blocks[index].style.backgroundColor = bg_color;
+    }
+
 
 }
 
