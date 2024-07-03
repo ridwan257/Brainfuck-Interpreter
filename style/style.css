@@ -1,0 +1,105 @@
+body {
+    background-image: url("../assets/img/matrix-falling-code-2.jpg");
+    background-size: cover;    
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    color: white;
+}
+
+
+#memory-section table tr td{
+    height: 30px;
+    width: 30px;
+    background-color: bisque;
+    border: 1px black solid;
+    text-align: center;
+    font-size: 14px;
+    color: black;
+    font-weight: normal;
+}
+
+.btn{
+    background-color: white;
+    border: 0px;
+}
+
+#code-editor {
+    width: 600px;
+    height: 400px;
+}
+
+#stdio {
+    background-color: rgba(128, 128, 128, 0.95);
+    color: lime;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 2px;
+    border: 1px solid #333;
+    width: 600px;
+    height: 400px;
+    overflow-y: auto;
+    /* white-space: pre-wrap; */
+    /* margin: 20px auto; */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#stdio input {
+    background-color: gray;
+    color: lime;
+    font-family: 'Courier New', Courier, monospace;
+    border: none;
+    margin: 1px;
+    outline: none;
+    width: 100%;
+}
+
+#stdio input::placeholder {
+    color: lime;
+}
+
+
+#info {
+    background: rgba(255, 255, 255, 0.8); 
+    /* padding: 20px; */
+    /* margin: 50px auto; */
+    width: 80%;
+    max-width: 800px;
+    /* border-radius: 10px; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+#info p {
+    font-size: 1.2em;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+#info table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#info table th, #info table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+#info table th {
+    background-color: #f2f2f2;
+}
+
+#info table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#info table tr:hover {
+    background-color: rgb(255, 255, 157);
+}
+
+
+#footer{
+    height: 100px;
+}
