@@ -13,15 +13,19 @@
     <script src="./script/ace.min.js"></script>
 </head>
 <body>
-    <h1>Brainfuck Interpreter</h1>
+    <div class="centered">
+        <h1>Brainf*ck Interpreter</h1>
+    </div>
+    
 
-    <div id="code-block">
+    <div id="code-block" class="centered">
         <div id="memory-section">
             <table></table>
         </div>
         <div id="control-panel">
             <button type="button" class="btn btn-outline-success" id="run">Run</button>
             <button type="button" class="btn btn-outline-success" id="reset">Clear</button>
+            <button type="button" class="btn btn-outline-danger" id='stop' onclick="force_stop()">TERMINATE</button>
         </div>
 
 
@@ -91,11 +95,11 @@
 
     </div>
 
-    <div id="footer"></div>
+    <div id="footer" class="centered"></div>
     
     <script src="./script/allocate_memory.js"></script>
-    <script src="./script/interpreter.js"></script>
     <script src="./script/stdio.js"></script>
+    <script src="./script/interpreter.js"></script>
     <script src="script/script.js"></script>
 </body>
 </html>

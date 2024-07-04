@@ -1,31 +1,36 @@
+let __interpreter_interval_time = 0;
+let __interpreter_execution_status = true;
 
-
-function find_prev(stringstream, index, line_number){
-    let sum = 0;
-    for(let i = index; i>=0; i--){
-        if(stringstream[i] == ']'){
-            sum++;
-        }
-        else if(stringstream[i] == '['){
-            sum--;
-        }
-        else if(stringstream[i] == '\n'){
-            line_number--;
-        }
-        
-        if(sum == 0){
-            return i;
-        }
-    }
-
-    return -1;
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function grab_input(message) {
+function default_opts(){
+    __interpreter_execution_status = true;
+    return {
+        current : 0,
+        memory_index : 0,
+        istream : '',
+        ostream : '',
+        end : null
+    }
+}
+
+function force_stop(){
+    __interpreter_execution_status = false;
+    // console.log('force stop is called');
+}
+
+function set_delay(time_ms){
+    __interpreter_interval_time = time_ms;
+}
+
+function grab_input(message=null) {
     return new Promise((resolve) => {
 
         const input_field = document.createElement('input');
         input_field.type = 'text';
+        if(message) input_field.value = message;
         stdio.appendChild(input_field);
         input_field.focus();
 
@@ -36,25 +41,44 @@ function grab_input(message) {
             }
         };
 
+        document.getElementById('stop').onclick = () => {
+            input_field.readOnly = true;
+            force_stop();
+            resolve(input_field.value);
+            // console.log('inside input');
+        };
+
         
     });
 }
 
-async function interpreter(stringstream, memory, current=0, index=0, end=null){
-    let ostream = '';
+async function interpreter(stringstream, memory, opt){
+    let current=opt.current;
+    let index=opt.memory_index;
+    let istream=opt.istream;
+    let ostream=opt.ostream;
     let ouptput_holder = false;
     let ouptput_elem = null;
-    let istream = '';
-    let line_num = 0;
-    let col_num = 0;
+    let exit_status = 'success';
+    const end = opt.end;
 
     while(true){
+        if(__interpreter_interval_time){
+            select_char_from_index(editor, current);
+            editor.blur();
+            await sleep(__interpreter_interval_time);
+        }
+        
         memory.highlight(index, true);
         ch = stringstream[current];
         
-        if(ch == null || (end && current > end))
+        if(!__interpreter_execution_status){
+            exit_status = 'forced_stop';
+            break;
+        }
+        else if(ch == null || (end && current > end))
         {
-            return ostream;
+            break;
         }
         else if(ch == '+')
         {
@@ -76,13 +100,13 @@ async function interpreter(stringstream, memory, current=0, index=0, end=null){
             memory.highlight(index, false);
             index--;
         }
-        else if(ch == '[')
+        else if(ch == '[' && memory.at(index) == 0)
         {
-            
+            current = find_next(stringstream, current);
         }
         else if(ch == ']' && memory.at(index) != 0)
         {   
-            current = find_prev(stringstream, current, line_num);
+            current = find_prev(stringstream, current);
             continue; 
         }
         else if(ch == '.'){
@@ -93,10 +117,12 @@ async function interpreter(stringstream, memory, current=0, index=0, end=null){
                 ouptput_holder = true;
             }
             append_to_console_element(ouptput_elem, char);
+            // console.log(char);
         }
         else if(ch == ','){
             if(istream.length == 0){
-                istream = await grab_input('Input');
+                select_char_from_index(editor, current);
+                istream = await grab_input();
             }
             ouptput_holder = false;
 
@@ -105,17 +131,24 @@ async function interpreter(stringstream, memory, current=0, index=0, end=null){
             memory.update(index, value);
         }
         else if(ch == '*'){
-            await grab_input();
-        }
-        else if(ch == '\n'){
-            line_num++;
-            col_num = 0;
+            select_char_from_index(editor, current);
+            editor.blur();
+            // exit_status = 'hault';
+            const position = locate_position(stringstream, current);
+            await grab_input(`idx:${current} | row:${position.row} col:${position.col}`);
         }
         
         
         current++;
-        col_num++;
     }
+
+    return {
+        ostream : ostream,
+        istream : istream,
+        current : current,
+        memory_index : index,
+        exit_status : exit_status
+    };
 
 }
 
@@ -125,8 +158,11 @@ function run(elem, mem) {
         try {
             console.log("hi babe!");
             const ss = elem.getValue();
-            const output_stream = interpreter(ss, mem);
-            res(output_stream);
+            interpreter(ss, mem, default_opts())
+            .then(report => {
+                res(report); 
+            })
+            .catch(error => err(error));     
         } catch (error) {
             err(error);
         }
