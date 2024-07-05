@@ -3,7 +3,7 @@ const memory = allocate_memory("#memory-section table", 8, 25);
 let is_running = false;
 let is_killed = false;
 let __interpreter_state = default_opts();
-
+let t1, t2;
 
 const run_button = document.getElementById("run");
 
@@ -37,17 +37,21 @@ run_button.addEventListener('click', ()=>{
         change_run_button_style('pause');
         
         const ss = editor.getValue();
+
+        t1 = new Date();
         interpreter(ss, memory, __interpreter_state)
         .then(data => {
             __interpreter_state = data;
             // console.dir(data);
-            // append_to_console(data.ostream);
+            t2 = new Date();
+            append_to_console(`${(t2-t1)/1000}s elapsed...`);
         })
         .catch( err => {
             console.log(err);
         })
         .finally(()=>{
             // ------------ after interpreter execution --------------
+            
             is_running = false;
             reset_estatus();
 
