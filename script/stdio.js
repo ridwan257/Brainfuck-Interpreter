@@ -82,6 +82,7 @@ const stdio = document.getElementById('stdio');
 
 function append_to_console(text) {
     const new_line = document.createElement('div');
+    new_line.classList.add('preserve-space');
     new_line.textContent = text;
     stdio.appendChild(new_line);
 }
@@ -93,10 +94,12 @@ function clear_console(command) {
 }
 
 function create_new_holder(){
-    const p = document.createElement('div');
-    p.innerText = '';
-    stdio.appendChild(p);
-    return p;
+    const div = document.createElement('div');
+    div.classList.add('preserve-space');
+    div.innerHTML = '';
+
+    stdio.appendChild(div);
+    return div;
 }
 
 function append_to_console_element(elem, text){

@@ -17,19 +17,30 @@
         <h1>Brainf*ck Interpreter</h1>
     </div>
     
+    <div id="view-port">
+        <div id="code-block" class="centered">
+            <div id="control-panel">
+                <button type="button" class="btn btn-outline-success" id="run" style="margin-left: 0;">Run</button>
+                <button type="button" class="btn btn-outline-success" id="reset">Clear</button>
+                <button type="button" class="btn btn-outline-danger" id='stop'>KILL</button>
+                <div id="speed-controller">
+                    <span>Speed</span>
+                    <select class="form-select" >
+                        <option value="400">1/8x</option>
+                        <option value="200">1/4x</option>
+                        <option value="100">1/2x</option>
+                        <option value="50" selected>1x</option>
+                        <option value="25">2x</option>
+                        <option value="12">4x</option>
+                        <option value="6">8x</option>
+                        <option value="2">16x</option>
+                        <option value="0">inf</option>
+                      </select>
+                </div>
+                
+            </div>
 
-    <div id="code-block" class="centered">
-        <div id="memory-section">
-            <table></table>
-        </div>
-        <div id="control-panel">
-            <button type="button" class="btn btn-outline-success" id="run">Run</button>
-            <button type="button" class="btn btn-outline-success" id="reset">Clear</button>
-            <button type="button" class="btn btn-outline-danger" id='stop' onclick="force_stop()">TERMINATE</button>
-        </div>
-
-
-        <div id="code-editor">//Hello world Example
+            <div id="code-editor">//Hello world Example
 ++++++++++
 [
     >+++++++
@@ -46,9 +57,22 @@
 >.+++.------.--------.
 >+.
 >.
+            </div>
+            <div id="stdio"></div>
         </div>
-        <div id="stdio">
-            
+
+        <div id="memory-section">
+            <table>
+                <tr 
+                style="border-bottom: 1px red solid; 
+                height: 34px; 
+                font-family:Courier;">
+                    <th colspan="6">Memory-Block</th>
+                    <th colspan="2">
+                        <button id="clear-memory">free</button>
+                    </th>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -85,11 +109,15 @@
             </tr>
             <tr>
                 <td>[</td>
-                <td>If the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching ] command.</td>
+                <td>If the byte at the data pointer is zero, then instead of moving the instruction 
+                    pointer forward to the next command, jump it forward to the command after the 
+                    matching ] command.</td>
             </tr>
             <tr>
                 <td>]</td>
-                <td>If the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching [ command.[a]</td>
+                <td>If the byte at the data pointer is nonzero, 
+                    then instead of moving the instruction pointer forward to the next command, 
+                    jump it back to the command after the matching [ command.[a]</td>
             </tr>
         </table>
 

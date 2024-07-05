@@ -1,4 +1,4 @@
-let __interpreter_interval_time = 0;
+let __interpreter_interval_time = 50;
 let __interpreter_execution_status = true;
 
 function sleep(ms) {
@@ -6,7 +6,6 @@ function sleep(ms) {
 }
 
 function default_opts(){
-    __interpreter_execution_status = true;
     return {
         current : 0,
         memory_index : 0,
@@ -18,7 +17,9 @@ function default_opts(){
 
 function force_stop(){
     __interpreter_execution_status = false;
-    // console.log('force stop is called');
+}
+function reset_estatus(){
+    __interpreter_execution_status = true;
 }
 
 function set_delay(time_ms){
@@ -41,12 +42,12 @@ function grab_input(message=null) {
             }
         };
 
-        document.getElementById('stop').onclick = () => {
+        document.getElementById('stop').addEventListener('click', () => {
             input_field.readOnly = true;
             force_stop();
             resolve(input_field.value);
-            // console.log('inside input');
-        };
+            console.log('inside input');
+        });
 
         
     });
@@ -59,25 +60,27 @@ async function interpreter(stringstream, memory, opt){
     let ostream=opt.ostream;
     let ouptput_holder = false;
     let ouptput_elem = null;
-    let exit_status = 'success';
+    let exit_status;
     const end = opt.end;
 
     while(true){
+        memory.highlight(index, true);
         if(__interpreter_interval_time){
             select_char_from_index(editor, current);
             editor.blur();
             await sleep(__interpreter_interval_time);
         }
         
-        memory.highlight(index, true);
         ch = stringstream[current];
         
         if(!__interpreter_execution_status){
             exit_status = 'forced_stop';
+            // if(end && current) 
             break;
         }
         else if(ch == null || (end && current > end))
-        {
+        {   
+            exit_status = 'success';
             break;
         }
         else if(ch == '+')
@@ -94,11 +97,19 @@ async function interpreter(stringstream, memory, opt){
         {   
             memory.highlight(index, false);
             index++;
+            if(index >= memory.size()){
+                exit_status = 'memory error'
+                break;
+            }
         }
         else if(ch == '<')
         {   
             memory.highlight(index, false);
             index--;
+            if(index < 0){
+                exit_status = 'memory error'
+                break;
+            }
         }
         else if(ch == '[' && memory.at(index) == 0)
         {
@@ -126,7 +137,7 @@ async function interpreter(stringstream, memory, opt){
             }
             ouptput_holder = false;
 
-            const value = istream.charCodeAt(0);
+            const value = istream.charCodeAt(0) || 0;
             istream = istream.substring(1);
             memory.update(index, value);
         }

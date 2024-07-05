@@ -11,32 +11,96 @@ body {
     justify-content: center;
 }
 
-.centered {
+/* .centered {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+} */
+
+#view-port{
+    display: flex;
+    flex-direction: row;
 }
 
+/* #memory-section{
+    margin: 33px 0 0 0;
+} */
 #memory-section table tr td{
-    height: 30px;
+    height: 28px;
     width: 30px;
-    background-color: bisque;
-    border: 1px black solid;
+    /* background-color: bisque; */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* border: 1px black solid; */
     text-align: center;
     font-size: 14px;
-    color: black;
-    font-weight: normal;
+    color: white;
+    font-weight: bold;
+}
+
+#memory-section #clear-memory{
+    height: 25px;
+    width: 100%;
+    padding: 0 2px;
+    border: 0;
+    font-size: 12px;
+    font-weight: bold;
+}
+#memory-section #clear-memory:hover{
+    background-color: red;
+    color: white;
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+#control-panel{
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    margin: 2px;
+    
 }
 
 .btn{
     background-color: white;
     border: 0px;
+    height: 30px;
+    padding: 2px 15px;
+    margin: 0 2px;
+    font-size: 12px;
+    font-family: Courier;
+    
 }
+
+#speed-controller{
+    display: inline-flex;
+    font-family: Courier;
+    height: 30px;
+    align-items: center;
+    margin-left: 4px;
+}
+
+#speed-controller span{
+    font-size: 16px;
+    padding: 0 4px 0 0;
+    font-weight: bold;
+}
+#speed-controller select{
+    padding: 0;
+    font-size: 12px;
+    height: 30px;
+    width: 60px;
+    font-weight: bold;
+
+}
+
+
+
+
 
 #code-editor {
     width: 600px;
-    height: 400px;
+    height: 350px;
 }
 
 #stdio {
@@ -46,11 +110,15 @@ body {
     padding: 2px;
     border: 1px solid #333;
     width: 600px;
-    height: 400px;
+    height: 350px;
     overflow-y: auto;
     /* white-space: pre-wrap; */
     /* margin: 20px auto; */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.preserve-space {
+    white-space: pre;
 }
 
 #stdio input {
@@ -73,7 +141,7 @@ body {
     /* padding: 20px; */
     /* margin: 50px auto; */
     width: 80%;
-    max-width: 800px;
+    max-width: 1000px;
     /* border-radius: 10px; */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: #333;

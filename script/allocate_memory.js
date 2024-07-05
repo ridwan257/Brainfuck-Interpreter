@@ -2,6 +2,17 @@
 class Memory{
     constructor(total_size){
         this.blocks = [];
+        this.ncolor = 'rgba(0, 0, 0, 0.5)';
+        this.hcolor = 'red';
+
+        for(let i = 0; i < total_size; i++){
+            const memory = document.createElement('td');
+            memory.innerText=0;
+            this.blocks.push(memory);
+        }
+
+        this.highlight(0, true);
+
     }
 
     get(index){
@@ -11,11 +22,15 @@ class Memory{
         }
     }
 
+    size(){
+        return this.blocks.length;
+    }
+
     at(index){
         return Number(this.blocks[index].innerText);
     }
 
-    set(value=0){
+    extend(value=0){
         const td = document.createElement('td');
         td.innerText = value;
         this.blocks.push(td);
@@ -29,8 +44,9 @@ class Memory{
     reset(){
         this.blocks.forEach(e => {
             e.innerText = 0;
-            e.style.backgroundColor = 'bisque';
+            e.style.backgroundColor = this.ncolor;
         });
+        this.highlight(0, true);
     }
 
     push(item){
@@ -38,7 +54,7 @@ class Memory{
     }
 
     highlight(index, state){
-        const bg_color = (state) ? 'yellow' : 'bisque';
+        const bg_color = (state) ? this.hcolor : this.ncolor;
         this.blocks[index].style.backgroundColor = bg_color;
     }
 
@@ -53,8 +69,7 @@ function allocate_memory(query_specifier, block_size, total) {
     for(let i = 0; i < total; i++){
         const tr = document.createElement("tr");
         for(let j=0; j < block_size; j++){
-            const memory = memory_block.set(0);
-            tr.appendChild(memory);
+            tr.appendChild(memory_block.get(i*block_size+j).block);
         }
         memory_section.appendChild(tr);
     }
